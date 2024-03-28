@@ -63,6 +63,7 @@ app.post("/eventRegistration", (req, res) => {
   console.log("hdbchdhcdc", req.body);
   EventRegistrationModel.create(req.body)
     .then(async (event) => {
+      console.log("evneettete", event);
       await EventModel.findByIdAndUpdate(
         event.eventId,
         { $push: { attendees: event.userId } },
