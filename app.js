@@ -4,7 +4,6 @@ const http = require("http").Server(app);
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const moment = require("moment");
 const nodemailer = require("nodemailer");
 
 async function main() {
@@ -18,7 +17,6 @@ async function main() {
     },
   });
 
-  // Define and send message inside transporter.sendEmail() and await info about send from promise:
   let info = await transporter.sendMail({
     from: '"You" <***-example-person@gmail.com>',
     to: "veereshak06@gmail.com",
@@ -44,7 +42,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/register", (req, res) => {
-  console.log("first", req.body);
   UserModule.create(req.body)
     .then((users) => res.json(users))
     .catch((err) => res.json(err));
@@ -52,10 +49,8 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
-  console.log("dknckdncd", email);
   UserModule.findOne({ email: email })
     .then((user) => {
-      console.log("useruser", user);
       if (user) {
         if (user.password === password) {
           res.json({ status: "success", userData: user });
@@ -70,7 +65,6 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/events", (req, res) => {
-  console.log("second", req.body);
   EventModel.create(req.body)
     .then((users) => res.json(users))
     .catch((err) => res.json(err));
@@ -93,11 +87,9 @@ app.get("/events", async (req, res) => {
 });
 
 app.post("/eventRegistration", (req, res) => {
-  console.log("hdbchdhcdc", req.body);
   EventRegistrationModel.create(req.body)
     .then(async (event) => {
       main();
-      console.log("evneettete", event);
       await EventModel.findByIdAndUpdate(
         event.eventId,
         { $push: { attendees: event.userId } },
